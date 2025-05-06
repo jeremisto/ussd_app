@@ -5,17 +5,18 @@ from datetime import datetime, timedelta
 import time
 
 app = Flask(__name__)
-app.secret_key = "secret-key"
+app.secret_key = 'ce59f6b81cd3b855d42c054c65d730290052548668600fa899294639dd6e8dee'
 
-# MySQL configuration
-app.config['MYSQL_HOST'] = "crossover.proxy.rlwy.net"
-app.config['MYSQL_USER'] = "root"
-app.config['MYSQL_PASSWORD'] = "BBYoZaaPxAdwlLnJzHzaowpwXZBWMhCG"
-app.config['MYSQL_DB'] = "railway"
-app.config['MYSQL_PORT'] = 29472
+# ✅ MySQL configuration for Railway
+app.config['MYSQL_HOST'] = 'turntable.proxy.rlwy.net'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = 'IlizDeqeIyydfaWlhMZbxqEgdIbAJPcH'
+app.config['MYSQL_DB'] = 'railway'
+app.config['MYSQL_PORT'] = 14909
 
 mysql = MySQL(app)
 
+# Session tracking
 session_timers = {}
 session_status_cache = {}
 
@@ -27,6 +28,7 @@ def ussd():
     steps = text.split("*")
     level = len(steps)
 
+    # Timeout check
     if session_id not in session_timers:
         session_timers[session_id] = time.time()
     elif time.time() - session_timers[session_id] > 180:
@@ -34,6 +36,7 @@ def ussd():
         return "END ⏰ Session expired. Please try again.", 200, {'Content-Type': 'text/plain'}
 
     try:
+        # Main menu
         if text == "":
             response = (
                 "CON 🌟 Welcome to the Marks Appeal System 🌟\n"
@@ -43,6 +46,7 @@ def ussd():
                 "4. Exit ❌"
             )
 
+        # Check marks
         elif text == "1":
             response = "CON 🧾 Enter your Student ID:\n0. Back"
 
@@ -71,6 +75,7 @@ def ussd():
             else:
                 response = "END ⚠️ Student ID not found."
 
+        # Appeal flow
         elif text == "2":
             response = "CON 🔍 Enter your Student ID to appeal:\n0. Back"
 
@@ -124,6 +129,7 @@ def ussd():
             cur.close()
             response = "END ✅ Appeal submitted successfully. We’ll review it shortly."
 
+        # Check appeal status
         elif text == "3":
             response = "CON 🕵️ Enter your Student ID:\n0. Back"
 
@@ -133,6 +139,7 @@ def ussd():
             student_id = steps[1]
             now = datetime.now()
 
+            # Cache recent request
             if session_id in session_status_cache:
                 cached = session_status_cache[session_id]
                 if now - cached['time'] < timedelta(minutes=4):
@@ -155,6 +162,7 @@ def ussd():
             else:
                 response = "END ❌ No appeal found for this Student ID."
 
+        # Exit
         elif text == "4":
             response = "END 👋 Thank you for using our service!"
 
@@ -163,13 +171,13 @@ def ussd():
 
     except Exception as e:
         print("🔥 ERROR in /ussd route:", e)
-        response = "END ⚠️ Dear customer, the network is experiencing technical problems. Please try again later."
+        response = "END ⚠️ Technical error. Please try again later."
 
     return response, 200, {'Content-Type': 'text/plain'}
 
 def redirect_main_menu():
     return (
-        "CON 🌟 Welcome to the Marks Appeal System 🌟\n"
+        "CON Welcome to Marks Appeal System 🌟\n"
         "1. Check my marks 📊\n"
         "2. Appeal my marks 📝\n"
         "3. Check appeal status 📋\n"
