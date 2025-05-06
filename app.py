@@ -7,12 +7,12 @@ import os
 app = Flask(__name__)
 app.secret_key = 'your_super_secret_key'  # Change for production use
 
-# ✅ Railway MySQL configuration
-app.config['MYSQL_HOST'] = 'crossover.proxy.rlwy.net'
+# ✅ Railway MySQL configuration (UPDATED)
+app.config['MYSQL_HOST'] = 'turntable.proxy.rlwy.net'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'BBYoZaaPxAdwlLnJzHzaowpwXZBWMhCG'
+app.config['MYSQL_PASSWORD'] = 'IlizDeqeIyydfaWlhMZbxqEgdIbAJPcH'
 app.config['MYSQL_DB'] = 'railway'
-app.config['MYSQL_PORT'] = 29472
+app.config['MYSQL_PORT'] = 14909
 
 mysql = MySQL(app)
 
