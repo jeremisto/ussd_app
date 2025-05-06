@@ -5,7 +5,7 @@ import hashlib
 import os
 
 app = Flask(__name__)
-app.secret_key = 'your_super_secret_key'  # Change for production use
+app.secret_key = 'ce59f6b81cd3b855d42c054c65d730290052548668600fa899294639dd6e8dee'  # Change for production use
 
 # ✅ Railway MySQL configuration (UPDATED)
 app.config['MYSQL_HOST'] = 'turntable.proxy.rlwy.net'
